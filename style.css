@@ -1,0 +1,190 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+body {
+  height: 100vh;
+  overflow: hidden; /* 🚫 no vertical scroll */
+  background: #fffefc;
+}
+
+.planner {
+  height: 100%;
+  padding: 16px;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.header h1 {
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+
+.date-nav {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.date-nav button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* MAIN GRID */
+.main {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  height: calc(100% - 40px);
+}
+
+/* LEFT */
+.left {
+  padding-right: 12px;
+  font-size: 11px;
+}
+
+/* GOAL BLOCK */
+.goal-block {
+  margin-bottom: 14px;
+}
+
+.goal-block label {
+  display: block;
+  font-size: 11px;
+  margin-bottom: 6px;
+  color: #111;
+}
+
+/* 3-line writing space */
+.goal-input {
+  height: 72px;                 /* fixed 3-line space */
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 12px;
+  line-height: 1.6;
+  padding: 4px 2px;
+  outline: none;
+
+  /* 🔑 IMPORTANT FIXES */
+  white-space: pre-wrap;        /* allow wrapping + new lines */
+  word-break: break-word;       /* break long words */
+  overflow-wrap: anywhere;      /* force wrap if needed */
+  overflow: hidden;             /* 🚫 no scroll, no spill */
+}
+
+
+.left h4 {
+  margin: 14px 0 8px;
+  font-size: 11px;
+}
+
+/* TASKS */
+.task {
+  height: 28px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+}
+
+/* TIMELINE */
+.timeline {
+  border-left: 1px solid #ddd;
+  padding-left: 8px;
+}
+
+.timeline-header {
+  display: grid;
+  grid-template-columns: 60px repeat(6, 1fr);
+  font-size: 10px;
+  color: #999;
+  margin-bottom: 4px;
+}
+
+.timeline-body {
+  display: grid;
+  grid-template-rows: repeat(20, 1fr); /* 5AM–12AM */
+}
+
+.time-row {
+  display: grid;
+  grid-template-columns: 60px repeat(6, 1fr);
+  height: 26px;
+}
+
+.time-label {
+  font-size: 10px;
+  color: #999;
+  padding-top: 6px;
+}
+
+.cell {
+  border: 1px solid #eee;
+  cursor: pointer;
+}
+
+.cell.active {
+  border-radius: 2px;
+}
+
+/* TASK HEADER */
+.task-header {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  font-size: 10px;
+  color: #999;
+  padding: 6px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+/* TASK ROW */
+.task {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  height: 28px;
+  border-bottom: 1px solid #eee;
+  font-size: 11px;
+}
+
+/* TASK COLOR CELL */
+.task-name {
+  display: flex;
+  align-items: center;
+  height: 100%;          /* 🔑 fill row vertically */
+  width: 100%;           /* 🔑 fill column horizontally */
+  padding-left: 8px;
+}
+
+.task {
+  align-items: stretch; /* ensures children fill height */
+}
+
+/* SELECTED TASK INDICATOR */
+.task-name.selected {
+  box-shadow: inset 0 0 0 1.5px rgba(0, 0, 0, 0.35);
+}
+
+
+/* DESCRIPTION CELL */
+.task-desc {
+  border-left: 1px solid #eee;
+  padding: 4px 6px;
+  font-size: 11px;
+  outline: none;
+
+  /* 🔒 SINGLE LINE LOCK */
+  white-space: nowrap;        /* no line breaks */
+  overflow: hidden;           /* clip overflow */
+  text-overflow: ellipsis;    /* show … when long */
+}

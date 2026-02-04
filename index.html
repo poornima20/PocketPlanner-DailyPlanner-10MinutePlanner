@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>10 Minute Planner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="planner">
+
+  <!-- HEADER -->
+  <header class="header">
+    <h1>10 MINUTE PLANNER</h1>
+
+    <div class="date-nav">
+      <button id="prevDay">←</button>
+      <span id="currentDate"></span>
+      <button id="nextDay">→</button>
+    </div>
+  </header>
+
+  <div class="main">
+
+    <!-- LEFT -->
+    <section class="left">
+      <div class="goal-block">
+        <label>GOAL</label>
+        <div class="goal-input" contenteditable="true"></div>
+        </div>
+
+
+      <h4>TASK LIST & COLOR CODE</h4>
+
+<div class="task-header">
+  <span>TASK</span>
+  <span>DESCRIPTION</span>
+</div>
+
+<div class="tasks" id="taskList"></div>
+
+    </section>
+
+    <!-- RIGHT TIMELINE -->
+    <section class="timeline">
+      <div class="timeline-header">
+        <span></span>
+        <span>10</span><span>20</span><span>30</span>
+        <span>40</span><span>50</span><span>60</span>
+      </div>
+
+      <div class="timeline-body" id="timelineBody"></div>
+    </section>
+
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
