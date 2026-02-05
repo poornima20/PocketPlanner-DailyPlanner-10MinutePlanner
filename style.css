@@ -96,7 +96,7 @@ body {
   border-bottom: 1px solid #eee;
   display: flex;
   align-items: center;
-  padding-left: 8px;
+  padding-left: 0;
 }
 
 /* TIMELINE */
@@ -164,7 +164,8 @@ body {
   align-items: center;
   height: 100%;          /* 🔑 fill row vertically */
   width: 100%;           /* 🔑 fill column horizontally */
-  padding-left: 8px;
+  padding-left: 0;
+  justify-content: center; /* horizontal center */
 }
 
 .task {

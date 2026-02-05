@@ -178,3 +178,4 @@ document.addEventListener("keydown", (e) => {
 loadGoal();
 renderTasks();
 renderTimeline();
+
