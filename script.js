@@ -129,7 +129,12 @@ function renderTasks() {
 
     const name = document.createElement("div");
     name.className = "task-name";
-    name.textContent = `Task ${i + 1}`;
+    function isMobile() {
+      return window.innerWidth <= 600;
+    }
+
+    name.textContent = isMobile() ? (i + 1) : `Task ${i + 1}`;
+
     name.style.background = color;
     name.onclick = () => {
     activeColor = color;

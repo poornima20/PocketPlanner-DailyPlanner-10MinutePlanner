@@ -45,9 +45,10 @@ body {
 /* MAIN GRID */
 .main {
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: minmax(180px, 28%) 1fr;
   height: calc(100% - 40px);
 }
+
 
 /* LEFT */
 .left {
@@ -188,3 +189,34 @@ body {
   overflow: hidden;           /* clip overflow */
   text-overflow: ellipsis;    /* show … when long */
 }
+
+@media (max-width: 600px) {
+
+  /* shrink task column */
+  .task-header {
+    grid-template-columns: 44px 1fr;
+  }
+
+  .task {
+    grid-template-columns: 44px 1fr;
+  }
+
+  /* numbered task box */
+  .task-name {
+    justify-content: center;
+    padding-left: 0;
+    font-weight: 500;
+    font-size: 11px;
+  }
+
+  .task-name::after {
+    content: "";
+  }
+}
+
+@media (max-width: 600px) {
+  .task-name {
+    border-radius: 4px;
+  }
+}
+
