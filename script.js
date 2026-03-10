@@ -1,7 +1,7 @@
 /* DATE */
 
 function getDateKey(date) {
-  return `planner-${date.toISOString().split("T")[0]}`;
+  return `fullmoon.pocketplanner.10minute.${date.toISOString().split("T")[0]}`;
 }
 
 function loadData() {
