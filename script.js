@@ -5,11 +5,15 @@ function getDateKey(date) {
 }
 
 function loadData() {
-  return JSON.parse(localStorage.getItem(getDateKey(currentDate))) || {
-    goal: "",
-    tasks: Array(15).fill(""),
-    timeline: Array(20).fill(null).map(() => Array(6).fill(null))
-  };
+  return (
+    JSON.parse(localStorage.getItem(getDateKey(currentDate))) || {
+      goal: "",
+      tasks: Array(15).fill(""),
+      timeline: Array(20)
+        .fill(null)
+        .map(() => Array(6).fill(null)),
+    }
+  );
 }
 
 function saveData(data) {
@@ -39,7 +43,6 @@ if (goalInput) {
   });
 }
 
-
 document.getElementById("prevDay").onclick = () => {
   currentDate.setDate(currentDate.getDate() - 1);
   renderDate();
@@ -56,25 +59,52 @@ document.getElementById("nextDay").onclick = () => {
   renderTimeline();
 };
 
-
 /* COLORS */
 const pastelColors = [
-  "#fde2e4", "#e2ece9", "#e4eaf1", "#fff1c1", "#f0efeb",
-  "#edf6f9", "#faedcd", "#f8edeb", "#eae4e9", "#e9f5db",
-  "#fcefe3", "#e3f2fd", "#f6eac2", "#f1faee", "#e8e8e4"
+  "#fde2e4",
+  "#e2ece9",
+  "#e4eaf1",
+  "#fff1c1",
+  "#f0efeb",
+  "#edf6f9",
+  "#faedcd",
+  "#f8edeb",
+  "#eae4e9",
+  "#e9f5db",
+  "#fcefe3",
+  "#e3f2fd",
+  "#f6eac2",
+  "#f1faee",
+  "#e8e8e4",
 ];
 
 /* TASKS */
 const taskList = document.getElementById("taskList");
 let activeColor = pastelColors[0];
 
-
 /* TIMELINE */
 const body = document.getElementById("timelineBody");
 const hours = [
-  "5 AM","6 AM","7 AM","8 AM","9 AM","10 AM",
-  "11 AM","12 PM","1 PM","2 PM","3 PM","4 PM",
-  "5 PM","6 PM","7 PM","8 PM","9 PM","10 PM","11 PM","12 AM"
+  "5 AM",
+  "6 AM",
+  "7 AM",
+  "8 AM",
+  "9 AM",
+  "10 AM",
+  "11 AM",
+  "12 PM",
+  "1 PM",
+  "2 PM",
+  "3 PM",
+  "4 PM",
+  "5 PM",
+  "6 PM",
+  "7 PM",
+  "8 PM",
+  "9 PM",
+  "10 PM",
+  "11 PM",
+  "12 AM",
 ];
 
 function renderTimeline() {
@@ -101,11 +131,23 @@ function renderTimeline() {
 
       cell.onclick = () => {
         const updated = loadData();
-        updated.timeline[r][c] = activeColor;
-        saveData(updated);
 
-        cell.style.background = activeColor;
-        cell.classList.add("active");
+        /* already selected → unselect */
+        if (updated.timeline[r][c]) {
+          updated.timeline[r][c] = null;
+
+          cell.style.background = "";
+          cell.classList.remove("active");
+        } else {
+
+        /* empty → select */
+          updated.timeline[r][c] = activeColor;
+
+          cell.style.background = activeColor;
+          cell.classList.add("active");
+        }
+
+        saveData(updated);
       };
 
       row.appendChild(cell);
@@ -115,9 +157,7 @@ function renderTimeline() {
   });
 }
 
-
 /* TASKS */
-
 
 function renderTasks() {
   taskList.innerHTML = "";
@@ -133,21 +173,20 @@ function renderTasks() {
       return window.innerWidth <= 600;
     }
 
-    name.textContent = isMobile() ? (i + 1) : `Task ${i + 1}`;
+    name.textContent = isMobile() ? i + 1 : `Task ${i + 1}`;
 
     name.style.background = color;
     name.onclick = () => {
-    activeColor = color;
+      activeColor = color;
 
-    // remove selection from all tasks
-    document.querySelectorAll(".task-name").forEach(t =>
-        t.classList.remove("selected")
-    );
+      // remove selection from all tasks
+      document
+        .querySelectorAll(".task-name")
+        .forEach((t) => t.classList.remove("selected"));
 
-    // mark current as selected
-    name.classList.add("selected");
+      // mark current as selected
+      name.classList.add("selected");
     };
-
 
     const desc = document.createElement("div");
     desc.className = "task-desc";
@@ -178,4 +217,3 @@ document.addEventListener("keydown", (e) => {
 loadGoal();
 renderTasks();
 renderTimeline();
-
