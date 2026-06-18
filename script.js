@@ -1,12 +1,39 @@
 /* DATE */
+const STORAGE_KEY = "fullmoon.pocketplanner.10minute";
+
+let saveTimer;
+
+function queueSave(data) {
+  clearTimeout(saveTimer);
+
+  saveTimer = setTimeout(() => {
+    saveData(data);
+  }, 1000);
+}
+
+function notifyDashboardSync() {
+  if (window.parent !== window) {
+    window.parent.postMessage(
+      {
+        type: "plannerChanged",
+        planner: STORAGE_KEY,
+      },
+      "*"
+    );
+  }
+}
 
 function getDateKey(date) {
-  return `fullmoon.pocketplanner.10minute.${date.toISOString().split("T")[0]}`;
+  return date.toISOString().split("T")[0];
 }
 
 function loadData() {
+  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+
+  const allData = saved?.data || {};
+
   return (
-    JSON.parse(localStorage.getItem(getDateKey(currentDate))) || {
+    allData[getDateKey(currentDate)] || {
       goal: "",
       tasks: Array(15).fill(""),
       timeline: Array(20)
@@ -16,8 +43,23 @@ function loadData() {
   );
 }
 
-function saveData(data) {
-  localStorage.setItem(getDateKey(currentDate), JSON.stringify(data));
+function saveData(dayData) {
+
+  const saved =
+    JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+      data: {},
+    };
+
+  saved.data[getDateKey(currentDate)] = dayData;
+
+  saved.updatedAt = Date.now();
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(saved)
+  );
+
+  notifyDashboardSync();
 }
 
 const goalInput = document.querySelector(".goal-input");
@@ -39,7 +81,7 @@ if (goalInput) {
   goalInput.addEventListener("input", () => {
     const data = loadData();
     data.goal = goalInput.textContent;
-    saveData(data);
+    queueSave(data);
   });
 }
 
@@ -147,7 +189,7 @@ function renderTimeline() {
           cell.classList.add("active");
         }
 
-        saveData(updated);
+        queueSave(updated);
       };
 
       row.appendChild(cell);
@@ -196,7 +238,7 @@ function renderTasks() {
     desc.addEventListener("input", () => {
       const updated = loadData();
       updated.tasks[i] = desc.textContent;
-      saveData(updated);
+      queueSave(updated);
     });
 
     row.appendChild(name);

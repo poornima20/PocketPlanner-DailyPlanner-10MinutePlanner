@@ -49,7 +49,6 @@ body {
   height: calc(100% - 40px);
 }
 
-
 /* LEFT */
 .left {
   padding-right: 12px;
@@ -70,7 +69,7 @@ body {
 
 /* 3-line writing space */
 .goal-input {
-  height: 72px;                 /* fixed 3-line space */
+  height: 72px; /* fixed 3-line space */
   border-bottom: 1px solid #e5e5e5;
   font-size: 12px;
   line-height: 1.6;
@@ -78,12 +77,11 @@ body {
   outline: none;
 
   /* 🔑 IMPORTANT FIXES */
-  white-space: pre-wrap;        /* allow wrapping + new lines */
-  word-break: break-word;       /* break long words */
-  overflow-wrap: anywhere;      /* force wrap if needed */
-  overflow: hidden;             /* 🚫 no scroll, no spill */
+  white-space: pre-wrap; /* allow wrapping + new lines */
+  word-break: break-word; /* break long words */
+  overflow-wrap: anywhere; /* force wrap if needed */
+  overflow: hidden; /* 🚫 no scroll, no spill */
 }
-
 
 .left h4 {
   margin: 14px 0 8px;
@@ -92,11 +90,20 @@ body {
 
 /* TASKS */
 .task {
-  height: 28px;
+  min-height: 22px;
+  height: clamp(22px, 2.2vh, 28px);
   border-bottom: 1px solid #eee;
   display: flex;
   align-items: center;
   padding-left: 0;
+}
+
+.tasks {
+  flex: 1;
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
 }
 
 /* TIMELINE */
@@ -121,7 +128,8 @@ body {
 .time-row {
   display: grid;
   grid-template-columns: 60px repeat(6, 1fr);
-  height: 26px;
+  height:calc((100vh - 120px) / 20);
+  min-height:18px;
 }
 
 .time-label {
@@ -162,8 +170,8 @@ body {
 .task-name {
   display: flex;
   align-items: center;
-  height: 100%;          /* 🔑 fill row vertically */
-  width: 100%;           /* 🔑 fill column horizontally */
+  height: 100%; /* 🔑 fill row vertically */
+  width: 100%; /* 🔑 fill column horizontally */
   padding-left: 0;
   justify-content: center; /* horizontal center */
 }
@@ -177,7 +185,6 @@ body {
   box-shadow: inset 0 0 0 1.5px rgba(0, 0, 0, 0.35);
 }
 
-
 /* DESCRIPTION CELL */
 .task-desc {
   border-left: 1px solid #eee;
@@ -186,13 +193,22 @@ body {
   outline: none;
 
   /* 🔒 SINGLE LINE LOCK */
-  white-space: nowrap;        /* no line breaks */
-  overflow: hidden;           /* clip overflow */
-  text-overflow: ellipsis;    /* show … when long */
+  white-space: nowrap; /* no line breaks */
+  overflow: hidden; /* clip overflow */
+  text-overflow: ellipsis; /* show … when long */
+}
+
+.left {
+  padding-right: 12px;
+  font-size: 11px;
+
+  display: flex;
+  flex-direction: column;
+
+  min-height: 0;
 }
 
 @media (max-width: 600px) {
-
   /* shrink task column */
   .task-header {
     grid-template-columns: 44px 1fr;
@@ -219,5 +235,16 @@ body {
   .task-name {
     border-radius: 4px;
   }
-}
 
+  .task {
+    height: 22px;
+  }
+
+  .task-desc {
+    font-size: 10px;
+  }
+
+  .task-name {
+    font-size: 10px;
+  }
+}
