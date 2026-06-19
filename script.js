@@ -3,8 +3,6 @@ const STORAGE_KEY = "fullmoon.pocketplanner.10minute";
 
 let saveTimer;
 
-let saveTimer;
-
 function queueSave(data) {
   clearTimeout(saveTimer);
 
