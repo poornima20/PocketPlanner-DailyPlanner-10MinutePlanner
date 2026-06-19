@@ -258,3 +258,23 @@ document.addEventListener("keydown", (e) => {
 loadGoal();
 renderTasks();
 renderTimeline();
+
+
+
+function cleanupLegacyYearOverview() {
+
+  const keysToDelete = [
+    "fullmoon.pocketplanner.yearoverview.2025-0-0",
+    "fullmoon.pocketplanner.yearoverview.2026-0-0",
+    "fullmoon.pocketplanner.yearoverview.2026-0-3",
+    "fullmoon.pocketplanner.yearoverview.2027-0-0"
+  ];
+
+  keysToDelete.forEach(key => {
+    localStorage.removeItem(key);
+    console.log("Deleted:", key);
+  });
+
+}
+
+cleanupLegacyYearOverview();
