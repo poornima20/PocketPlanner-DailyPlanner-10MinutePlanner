@@ -3,6 +3,8 @@ const STORAGE_KEY = "fullmoon.pocketplanner.10minute";
 
 let saveTimer;
 
+let saveTimer;
+
 function queueSave(data) {
   clearTimeout(saveTimer);
 
@@ -18,7 +20,7 @@ function notifyDashboardSync() {
         type: "plannerChanged",
         planner: STORAGE_KEY,
       },
-      "*"
+      "*",
     );
   }
 }
@@ -36,28 +38,21 @@ function loadData() {
     allData[getDateKey(currentDate)] || {
       goal: "",
       tasks: Array(15).fill(""),
-      timeline: Array(20)
-        .fill(null)
-        .map(() => Array(6).fill(null)),
+      timeline: {},
     }
   );
 }
 
 function saveData(dayData) {
-
-  const saved =
-    JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
-      data: {},
-    };
+  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+    data: {},
+  };
 
   saved.data[getDateKey(currentDate)] = dayData;
 
   saved.updatedAt = Date.now();
 
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(saved)
-  );
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
 
   notifyDashboardSync();
 }
@@ -166,8 +161,10 @@ function renderTimeline() {
       const cell = document.createElement("div");
       cell.className = "cell";
 
-      if (data.timeline[r][c]) {
-        cell.style.background = data.timeline[r][c];
+      const cellKey = `${r}-${c}`;
+
+      if (data.timeline[cellKey]) {
+        cell.style.background = data.timeline[cellKey];
         cell.classList.add("active");
       }
 
@@ -175,19 +172,21 @@ function renderTimeline() {
         const updated = loadData();
 
         /* already selected → unselect */
-        if (updated.timeline[r][c]) {
-          updated.timeline[r][c] = null;
+        const cellKey = `${r}-${c}`;
+
+        if (updated.timeline[cellKey]) {
+          delete updated.timeline[cellKey];
 
           cell.style.background = "";
           cell.classList.remove("active");
         } else {
-
-        /* empty → select */
-          updated.timeline[r][c] = activeColor;
+          updated.timeline[cellKey] = activeColor;
 
           cell.style.background = activeColor;
           cell.classList.add("active");
         }
+
+        queueSave(updated);
 
         queueSave(updated);
       };
