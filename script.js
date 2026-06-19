@@ -1,6 +1,13 @@
 /* DATE */
 const STORAGE_KEY = "fullmoon.pocketplanner.10minute";
 
+if (!localStorage.getItem("10minute_cleanup_done")) {
+
+  localStorage.removeItem("fullmoon.pocketplanner.10minute");
+
+  localStorage.setItem("10minute_cleanup_done", "true");
+}
+
 let saveTimer;
 let isUpdatingCell = false;
 
@@ -59,6 +66,7 @@ function saveData(dayData) {
 const goalInput = document.querySelector(".goal-input");
 
 let currentDate = new Date();
+let currentPlannerData = loadData();
 const dateEl = document.getElementById("currentDate");
 
 function renderDate() {
@@ -73,14 +81,18 @@ function loadGoal() {
 
 if (goalInput) {
   goalInput.addEventListener("input", () => {
-    const data = loadData();
-    data.goal = goalInput.textContent;
-    queueSave(data);
+    currentPlannerData.goal = goalInput.textContent;
+    queueSave(currentPlannerData);
   });
 }
 
 document.getElementById("prevDay").onclick = () => {
+  saveData(currentPlannerData);
+
   currentDate.setDate(currentDate.getDate() - 1);
+
+  currentPlannerData = loadData();
+
   renderDate();
   loadGoal();
   renderTasks();
@@ -88,7 +100,9 @@ document.getElementById("prevDay").onclick = () => {
 };
 
 document.getElementById("nextDay").onclick = () => {
+  saveData(currentPlannerData);
   currentDate.setDate(currentDate.getDate() + 1);
+  currentPlannerData = loadData();
   renderDate();
   loadGoal();
   renderTasks();
@@ -168,31 +182,25 @@ function renderTimeline() {
       }
 
       cell.onclick = () => {
-        if (isUpdatingCell) return;
-
-        isUpdatingCell = true;
-
-        const updated = loadData();
-
         const cellKey = `${r}-${c}`;
 
-        if (updated.timeline[cellKey]) {
-          delete updated.timeline[cellKey];
+        if (!currentPlannerData.timeline) {
+          currentPlannerData.timeline = {};
+        }
+
+        if (currentPlannerData.timeline[cellKey]) {
+          delete currentPlannerData.timeline[cellKey];
 
           cell.style.background = "";
           cell.classList.remove("active");
         } else {
-          updated.timeline[cellKey] = activeColor;
+          currentPlannerData.timeline[cellKey] = activeColor;
 
           cell.style.background = activeColor;
           cell.classList.add("active");
         }
 
-        queueSave(updated);
-
-        requestAnimationFrame(() => {
-          isUpdatingCell = false;
-        });
+        queueSave(currentPlannerData);
       };
 
       row.appendChild(cell);
@@ -239,9 +247,8 @@ function renderTasks() {
     desc.textContent = data.tasks[i] || "";
 
     desc.addEventListener("input", () => {
-      const updated = loadData();
-      updated.tasks[i] = desc.textContent;
-      queueSave(updated);
+      currentPlannerData.tasks[i] = desc.textContent;
+      queueSave(currentPlannerData);
     });
 
     row.appendChild(name);
