@@ -2,6 +2,7 @@
 const STORAGE_KEY = "fullmoon.pocketplanner.10minute";
 
 let saveTimer;
+let isUpdatingCell = false;
 
 function queueSave(data) {
   clearTimeout(saveTimer);
@@ -167,9 +168,12 @@ function renderTimeline() {
       }
 
       cell.onclick = () => {
+        if (isUpdatingCell) return;
+
+        isUpdatingCell = true;
+
         const updated = loadData();
 
-        /* already selected → unselect */
         const cellKey = `${r}-${c}`;
 
         if (updated.timeline[cellKey]) {
@@ -186,7 +190,9 @@ function renderTimeline() {
 
         queueSave(updated);
 
-        queueSave(updated);
+        requestAnimationFrame(() => {
+          isUpdatingCell = false;
+        });
       };
 
       row.appendChild(cell);
@@ -257,22 +263,18 @@ loadGoal();
 renderTasks();
 renderTimeline();
 
-
-
 function cleanupLegacyYearOverview() {
-
   const keysToDelete = [
     "fullmoon.pocketplanner.yearoverview.2025-0-0",
     "fullmoon.pocketplanner.yearoverview.2026-0-0",
     "fullmoon.pocketplanner.yearoverview.2026-0-3",
-    "fullmoon.pocketplanner.yearoverview.2027-0-0"
+    "fullmoon.pocketplanner.yearoverview.2027-0-0",
   ];
 
-  keysToDelete.forEach(key => {
+  keysToDelete.forEach((key) => {
     localStorage.removeItem(key);
     console.log("Deleted:", key);
   });
-
 }
 
 cleanupLegacyYearOverview();
